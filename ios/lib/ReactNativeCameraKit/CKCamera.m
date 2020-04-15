@@ -871,7 +871,7 @@ RCT_ENUM_CONVERTER(CKCameraZoomMode, (@{
         [self addSubview:self.dataReadingFrame];
         
         
-        [self startAnimatingScanner:self.dataReadingFrame];
+        // [self startAnimatingScanner:self.dataReadingFrame];
         
         [self addVisualEffects:self.dataReadingFrame.frame];
         
@@ -1106,7 +1106,7 @@ didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects
             
             AVMetadataMachineReadableCodeObject *code = (AVMetadataMachineReadableCodeObject*)[self.previewLayer transformedMetadataObjectForMetadataObject:metadataObject];
             if (self.onReadCode && code.stringValue && ![code.stringValue isEqualToString:self.codeStringValue]) {
-                self.onReadCode(@{@"codeStringValue": code.stringValue});
+                self.onReadCode(@{@"codeStringValue": code.stringValue, @"cornerPoints": code.corners});
                 [self stopAnimatingScanner];
             }
         }
