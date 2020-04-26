@@ -288,7 +288,14 @@ public class CameraViewManager extends SimpleViewManager<CameraView> {
         scanner = new BarcodeScanner(previewCallback, new BarcodeScanner.ResultHandler() {
             @Override
             public void handleResult(Result result) {
+                Camera.Size previewSize = camera.getParameters().getPreviewSize();
+                Rect frameRect = getFramingRectInPreview(previewSize.width, previewSize.height);
+                WritableMap frameSizeMap = Arguments.createMap();
+                frameSizeMap.putInt("width", frameRect.width());
+                frameSizeMap.putInt("height", frameRect.height());
+
                 WritableMap event = Arguments.createMap();
+                event.putMap("frameSize", frameSizeMap);
                 event.putString("codeStringValue", result.getText());
                 if (!cameraViews.empty())
                     reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(cameraViews.peek().getId(), "onReadCode", event);
