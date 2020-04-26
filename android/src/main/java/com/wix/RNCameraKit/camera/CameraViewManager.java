@@ -304,8 +304,14 @@ public class CameraViewManager extends SimpleViewManager<CameraView> {
                 previewSizeMap.putInt("width", previewSize.width);
                 previewSizeMap.putInt("height", previewSize.height);
 
+                Rect frameRect = getFramingRectInPreview(previewSize.width, previewSize.height);
+                WritableMap frameSizeMap = Arguments.createMap();
+                frameSizeMap.putInt("width", frameRect.width());
+                frameSizeMap.putInt("height", frameRect.height());
+
                 WritableMap event = Arguments.createMap();
                 event.putMap("previewSize", previewSizeMap);
+                event.putMap("frameSize", frameSizeMap);
                 event.putArray("cornerPoints", resultPointsArr);
                 event.putString("codeStringValue", result.getText());
                 if (!cameraViews.empty())
