@@ -15,6 +15,7 @@ import android.view.OrientationEventListener;
 import android.view.WindowManager;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -22,6 +23,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
 import com.wix.RNCameraKit.Utils;
 import com.wix.RNCameraKit.camera.barcode.BarcodeScanner;
 
@@ -288,7 +290,24 @@ public class CameraViewManager extends SimpleViewManager<CameraView> {
         scanner = new BarcodeScanner(previewCallback, new BarcodeScanner.ResultHandler() {
             @Override
             public void handleResult(Result result) {
+                Camera.Size previewSize = camera.getParameters().getPreviewSize();
+                Rect frameRect = getFramingRectInPreview(previewSize.width, previewSize.height);
+                WritableMap frameSizeMap = Arguments.createMap();
+                frameSizeMap.putInt("width", frameRect.width());
+                frameSizeMap.putInt("height", frameRect.height());
+                
+                ResultPoint[] resultPoints = result.getResultPoints();
+                WritableArray resultPointsArr = Arguments.createArray();
+                for(ResultPoint point: resultPoints){
+                    WritableMap pointMap = Arguments.createMap();
+                    pointMap.putDouble("X", point.getX());
+                    pointMap.putDouble("Y", point.getY());
+                    resultPointsArr.pushMap(pointMap);
+                }
+
                 WritableMap event = Arguments.createMap();
+                event.putMap("frameSize", frameSizeMap);
+                event.putArray("cornerPoints", resultPointsArr);
                 event.putString("codeStringValue", result.getText());
                 if (!cameraViews.empty())
                     reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(cameraViews.peek().getId(), "onReadCode", event);
