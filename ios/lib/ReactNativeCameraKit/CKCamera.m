@@ -871,7 +871,7 @@ RCT_ENUM_CONVERTER(CKCameraZoomMode, (@{
         [self addSubview:self.dataReadingFrame];
         
         
-        [self startAnimatingScanner:self.dataReadingFrame];
+        // [self startAnimatingScanner:self.dataReadingFrame];
         
         [self addVisualEffects:self.dataReadingFrame.frame];
         
