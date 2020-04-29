@@ -26,7 +26,7 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback {
     public CameraView(ThemedReactContext context) {
         super(context);
         surface = new SurfaceView(context);
-        setBackgroundColor(Color.RED);
+        setBackgroundColor(Color.BLACK);
         addView(surface, MATCH_PARENT, MATCH_PARENT);
         surface.getHolder().addCallback(this);
     }
