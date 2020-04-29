@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 
+import android.util.Log;
 import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.WindowManager;
@@ -251,6 +252,7 @@ public class CameraViewManager extends SimpleViewManager<CameraView> {
                 }
             }
         }
+
         return optimalSize;
     }
 
@@ -262,7 +264,9 @@ public class CameraViewManager extends SimpleViewManager<CameraView> {
             Display display = wm.getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
+            Log.d("DEBUG", "SIZE Y 1: " + size.y);
             size.y = Utils.convertDeviceHeightToSupportedAspectRatio(size.x, size.y);
+            Log.d("DEBUG", "SIZE Y 2: " + size.y);
             if (camera == null) return;
             List<Camera.Size> supportedPreviewSizes = camera.getParameters().getSupportedPreviewSizes();
             List<Camera.Size> supportedPictureSizes = camera.getParameters().getSupportedPictureSizes();
@@ -270,8 +274,8 @@ public class CameraViewManager extends SimpleViewManager<CameraView> {
             Camera.Size optimalPictureSize = getOptimalPreviewSize(supportedPictureSizes, size.x, size.y);
             Camera.Parameters parameters = camera.getParameters();
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            parameters.setPreviewSize(optimalSize.width, optimalSize.height);
-            parameters.setPictureSize(optimalPictureSize.width, optimalPictureSize.height);
+            parameters.setPreviewSize(size.x, size.y);
+            parameters.setPictureSize(size.x, size.y);
             parameters.setFlashMode(flashMode);
             camera.setParameters(parameters);
         } catch (RuntimeException ignored) {
