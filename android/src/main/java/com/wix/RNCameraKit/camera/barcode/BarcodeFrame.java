@@ -54,19 +54,20 @@ public class BarcodeFrame extends View {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
 
         width = getMeasuredWidth();
         height = getMeasuredHeight();
+
         int marginWidth = width / WIDTH_SCALE;
         int frameWidth = width - 2 * marginWidth;
         int marginHeight = (int) ((height - frameWidth) / 2);
 
         frameRect.left = marginWidth;
         frameRect.right = width - marginWidth;
-        frameRect.top = marginHeight;
-        frameRect.bottom = height - marginHeight;
+        frameRect.top = marginHeight - top;
+        frameRect.bottom = height - marginHeight - top;
     }
 
     @Override
