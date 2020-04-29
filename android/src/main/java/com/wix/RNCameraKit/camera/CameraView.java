@@ -3,6 +3,9 @@ package com.wix.RNCameraKit.camera;
 import android.graphics.Color;
 import android.graphics.Rect;
 import androidx.annotation.ColorInt;
+
+import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -26,7 +29,7 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback {
     public CameraView(ThemedReactContext context) {
         super(context);
         surface = new SurfaceView(context);
-        setBackgroundColor(Color.BLACK);
+        setBackgroundColor(Color.RED);
         addView(surface, MATCH_PARENT, MATCH_PARENT);
         surface.getHolder().addCallback(this);
     }
@@ -36,10 +39,12 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback {
         int actualPreviewWidth = getResources().getDisplayMetrics().widthPixels;
         int actualPreviewHeight = getResources().getDisplayMetrics().heightPixels;
         int height = Utils.convertDeviceHeightToSupportedAspectRatio(actualPreviewWidth, actualPreviewHeight);
-        surface.layout(0, 0, actualPreviewWidth, height);
+        int gap = (actualPreviewHeight - height)/2;
+        surface.layout(0, gap, actualPreviewWidth, actualPreviewHeight - gap);
         if (barcodeFrame != null) {
-            ((View) barcodeFrame).layout(0, 0, actualPreviewWidth, height);
+            ((View) barcodeFrame).layout(0, gap, actualPreviewWidth, actualPreviewHeight - gap);
         }
+        Log.d("DEBUG", "actualPreviewHeight:" + actualPreviewWidth + " - " + actualPreviewHeight + " - " + height );
     }
 
     @Override
