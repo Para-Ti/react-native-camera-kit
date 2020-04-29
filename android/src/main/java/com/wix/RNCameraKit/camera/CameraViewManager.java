@@ -274,8 +274,8 @@ public class CameraViewManager extends SimpleViewManager<CameraView> {
             Camera.Size optimalPictureSize = getOptimalPreviewSize(supportedPictureSizes, size.x, size.y);
             Camera.Parameters parameters = camera.getParameters();
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            parameters.setPreviewSize(size.x, size.y);
-            parameters.setPictureSize(size.x, size.y);
+            parameters.setPreviewSize(optimalSize.width, optimalSize.height);
+            parameters.setPictureSize(optimalPictureSize.width, optimalPictureSize.height);
             parameters.setFlashMode(flashMode);
             camera.setParameters(parameters);
         } catch (RuntimeException ignored) {
